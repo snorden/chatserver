@@ -1,0 +1,10 @@
+Client commands(Pipe separated,newline indicates end of text)
+
+CONTACT|<UserAlias>: Returns Alias|First|Last|Last Active time|Presence
+SET_PRESENCE|Alias|<Presence>
+GET_PRESENCE|<UserAlias>
+SEND|<UserAlias>|<msg>
+REGISTER|<User Alias>|First|Last -> Happens automatically as part of initial handshake
+DEREGISTER|<UserAlias>
+GROUPSEND|<Alias1>;<Alias2>|<msg>
+BROADCAST|<msg>

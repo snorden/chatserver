@@ -1,0 +1,58 @@
+apply plugin: 'java'
+groupId='com.symphony.chatserver'
+artifactId='symphony'
+apply plugin : 'application'
+startScripts.enabled=false
+run.enabled=false
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile 'org.slf4j:slf4j-simple:1.7.6'
+}
+sourceCompatibility = 1.7
+version = '1.0'
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Symphony Chat',
+                   'Implementation-Version': version
+    }
+	from fileTree('src/main/java/') { include '**/*.*' } 
+	from fileTree('src/main/resources') { include '**/*.*' } 	
+}
+ 
+createScript(project, 'com.symphony.chatserver.ChatServer', "ChatServer")
+createScript(project, 'com.symphony.chatserver.ChatClient', "ChatClient")
+ 
+ 
+dependencies {
+       testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+ 
+
+ 
+def createScript(project, mainClass, name) {
+       project.tasks.create(name:name, type:CreateStartScripts) {
+              outputDir = new File(project.buildDir, 'scripts')
+              mainClassName = mainClass
+              applicationName = name
+              classpath = project.tasks[JavaPlugin.JAR_TASK_NAME].outputs.files + project.configurations.runtime
+              classpath += files('/etc/cassandra/conf')
+       }
+       project.tasks[name].dependsOn(project.jar)
+ 
+       project.applicationDistribution.with {
+              into("bin") {
+                     from(project.tasks[name])
+                     fileMode=0755
+              }
+			  into("conf") {
+			      from fileTree('src/main/resources/'){
+				      include '**/*.*'
+				  }
+			  }
+       }
+}
+
+
