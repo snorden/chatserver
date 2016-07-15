@@ -1,4 +1,4 @@
-ChatServer Code for Symphony
+ChatServer Code In Java
 
 Main Classes: ChatServer, ChatClient 
 Assumes you have unzipped src zip file and are at the root of the tree (Symphony)
